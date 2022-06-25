@@ -1,0 +1,30 @@
+GET http://localhost:8080/phonebook
+
+
+###
+POST http://localhost:8080/add-contact-data
+content-type: application/json
+
+{
+    "firstName":"Lewis",
+    "lastName":"Badmintion",
+    "telNumber":3232232323
+}
+    
+
+###
+GET http://localhost:8080/phonebook/1
+
+
+### 
+DELETE http://localhost:8080/phonebook/8
+
+
+
+###
+PATCH http://localhost:8080/phonebook/9
+content-type: application/json
+
+{
+      "telNumber":8944331122
+}
