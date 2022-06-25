@@ -20,7 +20,6 @@ GET http://localhost:8080/phonebook/1
 DELETE http://localhost:8080/phonebook/8
 
 
-
 ###
 PATCH http://localhost:8080/phonebook/9
 content-type: application/json
