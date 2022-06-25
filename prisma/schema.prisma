@@ -1,0 +1,21 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model ContactData { //defining what data type to expect  from client 
+  id Int @id @default(autoincrement()) //auto increment id of the given client
+  firstName String 
+  lastName String
+  telNumber Int @unique
+  createdAt DateTime @default(now()) //default value of  date when model was creating 
+}
