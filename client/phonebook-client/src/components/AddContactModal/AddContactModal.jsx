@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { postContactDataService } from "../../services/post-contact-data-service";
 import { AlertBox } from "../AlertBox/AlertBox";
 
 export const AddContactModal = () => {
+  useEffect(() => {
+    postContactDataService(1, {
+      firstName: "Cardi",
+      lastName: "A",
+      telNumber: 8902930293,
+    });
+  }, []);
   const [contactData, setContactData] = useState({
     id: uuidv4(),
     firstName: "",

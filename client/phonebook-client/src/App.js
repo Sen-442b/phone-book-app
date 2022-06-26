@@ -12,3 +12,5 @@ function App() {
 }
 
 export default App;
+
+// figure out cors for post request

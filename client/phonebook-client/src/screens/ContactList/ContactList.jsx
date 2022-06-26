@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { ContactCard } from "./ContactCard";
 const mockData = [
   { id: 1, firstName: "lorem", lastName: "ipsum", telNumber: 9092 },
@@ -8,12 +8,16 @@ const mockData = [
 ];
 
 const getAllContactsService = async () => {
-  const response = await axios.get();
+  const response = await axios.get("http://localhost:8080/phonebook");
+  console.log(response);
 };
 
 const getAllContactsHandler = () => {};
 
 export const ContactList = () => {
+  useEffect(() => {
+    getAllContactsService();
+  }, []);
   return (
     <div>
       <h1> Phone Book App</h1>
