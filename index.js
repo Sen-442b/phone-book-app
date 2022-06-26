@@ -1,5 +1,8 @@
 const { PrismaClient } = require("@prisma/client");
 const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+//const bodyParser = require("body")
 
 //const router = require("express").Router();
 const app = express();
@@ -8,8 +11,8 @@ const prisma = new PrismaClient();
 app.listen("8080", () => {
   console.log("works");
 });
-app.use(express.json()); //convert every request into JSON
-
+app.use(bodyParser.json()); //convert every request into JSON
+app.use(cors());
 // GET phonebook
 app.get("/phonebook", async (req, res, next) => {
   try {
