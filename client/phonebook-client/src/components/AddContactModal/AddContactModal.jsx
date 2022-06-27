@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { postContactDataService } from "../../services/post-contact-data-service";
 import { AlertBox } from "../AlertBox/AlertBox";
 
-export const AddContactModal = ({ setIsModalOpen }) => {
+export const AddContactModal = ({ setIsModalOpen, setContactListData }) => {
   const [contactData, setContactData] = useState({
     id: uuidv4(),
     firstName: "",
@@ -41,15 +41,27 @@ export const AddContactModal = ({ setIsModalOpen }) => {
       }));
     }
   };
-  const postContactData = async (reqObj) => {
+
+  /*To be used with a functioning api*/
+  const postContactDataHandler = async (reqObj) => {
     try {
       const resp = await postContactDataService(reqObj);
+      /*Expecting api to return updated response*/
+      setContactListData(resp.data.phonebook);
+      setIsModalOpen(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const postContactDataTemp = (reqObj) => {};
+  const postContactDataHandlerTemp = (reqObj) => {
+    const response = JSON.parse(localStorage.getItem("phonebook")) || [];
+    localStorage.setItem("phonebook", JSON.stringify([...response, reqObj]));
+    const updatedResponse = JSON.parse(localStorage.getItem("phonebook"));
+    setContactListData(updatedResponse);
+
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="modal-container flex-center">
@@ -63,7 +75,7 @@ export const AddContactModal = ({ setIsModalOpen }) => {
         </button>
         <h1> Add Contact</h1>
         <form
-          onSubmit={() => postContactData(contactData)}
+          onSubmit={() => postContactDataHandlerTemp(contactData)}
           className="flex-start"
         >
           <div className="input-wrapper">
