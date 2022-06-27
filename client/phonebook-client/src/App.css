@@ -1,5 +1,8 @@
-.App {
+@import url("../src/screens/ContactList/contact-list.css");
+
+.app {
   text-align: center;
+  padding: 1rem;
 }
 
 .App-logo {

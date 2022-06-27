@@ -4,8 +4,8 @@ import { ContactList } from "./screens/ContactList/ContactList";
 
 function App() {
   return (
-    <div className="App">
-      <AddContactModal />
+    <div className="app flex-column flex-center">
+      {/* <AddContactModal /> */}
       <ContactList />
     </div>
   );
