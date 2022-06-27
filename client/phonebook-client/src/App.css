@@ -1,4 +1,5 @@
 @import url("../src/screens/ContactList/contact-list.css");
+@import url("../src/components/AddContactModal/add-contact-modal.css");
 
 .app {
   text-align: center;

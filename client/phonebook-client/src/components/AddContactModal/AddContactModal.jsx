@@ -4,14 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { postContactDataService } from "../../services/post-contact-data-service";
 import { AlertBox } from "../AlertBox/AlertBox";
 
-export const AddContactModal = () => {
-  useEffect(() => {
-    postContactDataService(1, {
-      firstName: "Cardi",
-      lastName: "A",
-      telNumber: 8902930293,
-    });
-  }, []);
+export const AddContactModal = ({ setIsModalOpen }) => {
   const [contactData, setContactData] = useState({
     id: uuidv4(),
     firstName: "",
@@ -48,65 +41,96 @@ export const AddContactModal = () => {
       }));
     }
   };
-  const postContactData = (event) => {
-    event.preventDefault();
-    console.log(contactData);
+  const postContactData = async (reqObj) => {
+    try {
+      const resp = await postContactDataService(reqObj);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  return (
-    <div style={{ border: "1px solid green" }}>
-      <h1 style={{ color: "green" }}> Modal</h1>
-      <form onSubmit={postContactData}>
-        <div>
-          <label htmlFor="first-name">First Name</label>
-          <input
-            type="text"
-            name="firstName"
-            id="first-name"
-            title="First Name"
-            onChange={formDataChangeHandler}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="last-name">Last Name</label>
-          <input
-            type="text"
-            onChange={formDataChangeHandler}
-            name="lastName"
-            id="last-name"
-            title="Last Name"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="number">Phone Number</label>
-          <input
-            type="number"
-            onChange={(e) => {
-              formDataChangeHandler(e);
-              getTelNumberVerificationHandler(Number(e.target.value));
-            }}
-            name="telNumber"
-            id="number"
-            title="Mobile Number"
-            required
-          />
-          {Boolean(telNumber) && !isTelNumberValid && (
-            <AlertBox
-              alertContent={{
-                type: "danger",
-                message: "Enter a valid phone number",
-              }}
-            />
-          )}
-        </div>
+  const postContactDataTemp = (reqObj) => {};
 
-        <input
-          type="submit"
-          disabled={!firstName || !lastName || !telNumber || !isTelNumberValid}
-        />
-      </form>
+  return (
+    <div className="modal-container flex-center">
+      <div className="modal-content  padding-mdm">
+        <button
+          title="Close Modal"
+          className="btn btn-sml pos-abs-top-right  box-shadow-none red-text-color fs-sml"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <i class="fa-solid fa-circle-xmark"></i>
+        </button>
+        <h1> Add Contact</h1>
+        <form
+          onSubmit={() => postContactData(contactData)}
+          className="flex-start"
+        >
+          <div className="input-wrapper">
+            <label htmlFor="first-name" className="required-field">
+              First Name
+            </label>
+            <input
+              type="text"
+              name="firstName"
+              id="first-name"
+              title="First Name"
+              className="form-input"
+              placeholder="Ben"
+              onChange={formDataChangeHandler}
+              required
+            />
+          </div>
+          <div className="input-wrapper">
+            <label htmlFor="last-name" className="required-field">
+              Last Name
+            </label>
+            <input
+              type="text"
+              onChange={formDataChangeHandler}
+              name="lastName"
+              id="last-name"
+              title="Last Name"
+              className="form-input"
+              placeholder="Awad"
+              required
+            />
+          </div>
+          <div className="input-wrapper">
+            <label htmlFor="number" className="required-field">
+              Phone Number
+            </label>
+            <input
+              type="number"
+              className="form-input"
+              onChange={(e) => {
+                formDataChangeHandler(e);
+                getTelNumberVerificationHandler(Number(e.target.value));
+              }}
+              name="telNumber"
+              id="number"
+              title="Mobile Number"
+              required
+            />
+            {Boolean(telNumber) && !isTelNumberValid && (
+              <AlertBox
+                alertContent={{
+                  type: "danger",
+                  message: "Enter a valid phone number",
+                }}
+              />
+            )}
+          </div>
+
+          <input
+            className="btn btn-cta"
+            type="submit"
+            disabled={
+              !firstName || !lastName || !telNumber || !isTelNumberValid
+            }
+          />
+        </form>
+      </div>
     </div>
   );
 };
