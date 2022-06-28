@@ -1,6 +1,7 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { editContactService } from "../../services/edit-contact-data";
 
 import { postContactDataService } from "../../services/post-contact-data-service";
 import { AlertBox } from "../AlertBox/AlertBox";
@@ -31,6 +32,12 @@ export const AddContactModal = ({
       isTelNumberValid: /^[6-9][0-9]{9}$/.test(telNumber) ? true : false,
     });
   const { isTelNumberValid } = contactDataClientSideErrors;
+  const inputRef = useRef();
+
+  useEffect(() => {
+    console.log(inputRef.current);
+    inputRef.current.focus();
+  }, []);
 
   const formDataChangeHandler = (event) => {
     const eventName = event.target.name;
@@ -80,17 +87,8 @@ export const AddContactModal = ({
     setIsModalOpen(false);
   };
 
-  const editContactService = async (editObj) => {
-    const { id } = editObj;
-
-    const response = await axios.patch(
-      `http://localhost:8080/phonebook/${id}`,
-      editObj
-    );
-    return response;
-  };
-
   const editContactDataHandler = async (editObj) => {
+    //to be used with a functioning api
     try {
       const response = await editContactService(editObj);
       //Expecting updated response from the api
@@ -164,6 +162,7 @@ export const AddContactModal = ({
               onChange={formDataChangeHandler}
               required
               value={firstName}
+              ref={inputRef}
             />
           </div>
           <div className="input-wrapper">
@@ -180,6 +179,7 @@ export const AddContactModal = ({
               placeholder="Awad"
               required
               value={lastName}
+              ref={firstName ? inputRef : null}
             />
           </div>
           <div className="input-wrapper">
@@ -199,6 +199,7 @@ export const AddContactModal = ({
               title="Mobile Number"
               required
               value={telNumber}
+              ref={firstName && lastName ? inputRef : null}
             />
             {Boolean(telNumber) && !isTelNumberValid && (
               <AlertBox

@@ -26,13 +26,10 @@ export const ContactCard = ({
 
   const deleteContactDataHandlerTemp = (objId) => {
     const response = JSON.parse(localStorage.getItem("phonebook"));
-
     const filteredResponse = response.filter(
       (contactData) => contactData.id !== objId
     );
-    console.log(filteredResponse);
     localStorage.setItem("phonebook", JSON.stringify(filteredResponse));
-
     const updatedResponse = JSON.parse(localStorage.getItem("phonebook"));
     setContactListData(updatedResponse);
   };
