@@ -7,4 +7,4 @@
 5. Use `npm start` in the root directory to start the server locally
 6. Install Rest client extension in VS code
 7. Check the functioning of the api using  the `rest.http` file 
-8. Or use postman (server would be running in  port:8080) 
+8. Or use postman (server would be running on  port:8080) 
