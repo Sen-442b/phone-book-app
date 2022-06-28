@@ -1,11 +1,8 @@
 import axios from "axios";
 
+// TO BE USED WITH A FUNCTIONING API
+
 export const postContactDataService = async (reqObj) => {
-  try {
-    const response = await axios.post(
-      "http://localhost:8080/phonebook",
-      reqObj
-    );
-    console.log(response);
-  } catch (error) {}
+  const response = await axios.post("http://localhost:8080/phonebook", reqObj);
+  return response;
 };

@@ -1,0 +1,116 @@
+:root {
+  --primary-bg-color: #f5f5f4;
+  --grey-dark: #64748b;
+  --grey-light: #89909a;
+}
+
+.phonebook-wrapper {
+  background-color: var(--primary-bg-color);
+  width: 50%;
+}
+
+.phonebook-container {
+  border: 2px solid var(--grey-dark);
+  border-radius: 5px;
+  margin-top: 2rem;
+  background-color: #f8fafc;
+  max-height: 27rem;
+  overflow-y: auto;
+}
+
+.user-details {
+  gap: 0;
+}
+.user-details-name {
+  font-weight: 500;
+  font-size: larger;
+}
+.user-details-num {
+  color: var(--grey-light);
+}
+
+.margin-0 {
+  margin: 0;
+}
+
+.contact-card {
+  padding: 1rem;
+  border-bottom: 2px solid var(--grey-dark);
+}
+.btn-ico {
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-ico :hover {
+  filter: brightness(1.2);
+}
+
+.gap-sml {
+  display: flex;
+  gap: 1rem;
+}
+
+.phonebook-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25rem;
+}
+
+.create-contact-icon {
+  color: var(--grey-dark);
+  cursor: pointer;
+}
+.create-contact-icon:hover {
+  color: var(--grey-light);
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+
+.font-size-mdm {
+  font-size: 2.5rem;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+@media only screen and (max-width: 1042px) {
+  .phonebook-wrapper {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 740px) {
+  .fs-lrg {
+    font-size: 3.5rem;
+  }
+
+  .fs-mdm {
+    font-size: 2rem;
+  }
+  .fs-sml {
+    font-size: 1rem;
+  }
+  .user-details-name {
+    font-size: x-large;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .phonebook-wrapper {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 477px) {
+  .fs-lrg {
+    font-size: 3rem;
+  }
+  .fs-mdm {
+    font-size: 1.5rem;
+  }
+}
