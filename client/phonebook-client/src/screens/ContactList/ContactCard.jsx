@@ -38,7 +38,7 @@ export const ContactCard = ({
     <div>
       <div className="flex flex-spc-btwn contact-card">
         <div className="text-align-left user-details">
-          <p className="margin-0 user-details-name">
+          <p className="margin-0 user-details-name text-capitalize">
             {firstName} {lastName}
           </p>
           <p className="margin-0 fs-sml user-details-num">

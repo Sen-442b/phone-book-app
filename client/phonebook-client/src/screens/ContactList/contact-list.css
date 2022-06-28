@@ -74,3 +74,43 @@
 .font-size-mdm {
   font-size: 2.5rem;
 }
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+@media only screen and (max-width: 1042px) {
+  .phonebook-wrapper {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 740px) {
+  .fs-lrg {
+    font-size: 3.5rem;
+  }
+
+  .fs-mdm {
+    font-size: 2rem;
+  }
+  .fs-sml {
+    font-size: 1rem;
+  }
+  .user-details-name {
+    font-size: x-large;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .phonebook-wrapper {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 477px) {
+  .fs-lrg {
+    font-size: 3rem;
+  }
+  .fs-mdm {
+    font-size: 1.5rem;
+  }
+}
