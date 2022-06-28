@@ -1,21 +1,35 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { postContactDataService } from "../../services/post-contact-data-service";
 import { AlertBox } from "../AlertBox/AlertBox";
 
-export const AddContactModal = ({ setIsModalOpen, setContactListData }) => {
-  const [contactData, setContactData] = useState({
+export const AddContactModal = ({
+  setIsModalOpen,
+  setContactListData,
+  editObj,
+  setEditObj,
+  searchInput,
+  setSearchInput,
+  contactData,
+  setContactData,
+  isEditing,
+  setIsEditing,
+}) => {
+  const initialState = {
     id: uuidv4(),
     firstName: "",
     lastName: "",
-    telNumber: null,
-  });
+    telNumber: "", //can't give null as initial value for controlled inputs
+  };
+
+  const { firstName, lastName, telNumber } = contactData;
+
   const [contactDataClientSideErrors, setContactDataClientSideErrors] =
     useState({
-      isTelNumberValid: false,
+      isTelNumberValid: /^[6-9][0-9]{9}$/.test(telNumber) ? true : false,
     });
-  const { firstName, lastName, telNumber } = contactData;
   const { isTelNumberValid } = contactDataClientSideErrors;
 
   const formDataChangeHandler = (event) => {
@@ -23,12 +37,15 @@ export const AddContactModal = ({ setIsModalOpen, setContactListData }) => {
     const eventValue = event.target.value;
     setContactData((prevObj) => ({
       ...prevObj,
-      [eventName]: isNaN(eventValue) ? eventValue : Number(eventValue),
+      [eventName]: isNaN(parseInt(eventValue))
+        ? eventValue
+        : Number(eventValue),
     }));
   };
 
   const getTelNumberVerificationHandler = (telNum) => {
     const valid_tel_num_format = /^[6-9][0-9]{9}$/; //^[6-9]-->first digit should be between 6-9, [0-9]{9}$:-
+
     if (valid_tel_num_format.test(telNum)) {
       setContactDataClientSideErrors((prevObj) => ({
         ...prevObj,
@@ -57,10 +74,47 @@ export const AddContactModal = ({ setIsModalOpen, setContactListData }) => {
   const postContactDataHandlerTemp = (reqObj) => {
     const response = JSON.parse(localStorage.getItem("phonebook")) || [];
     localStorage.setItem("phonebook", JSON.stringify([...response, reqObj]));
-    const updatedResponse = JSON.parse(localStorage.getItem("phonebook"));
-    setContactListData(updatedResponse);
+    const editedResponse = JSON.parse(localStorage.getItem("phonebook"));
+    setContactListData(editedResponse);
 
     setIsModalOpen(false);
+  };
+
+  const editContactService = async (editObj) => {
+    const { id } = editObj;
+
+    const response = await axios.patch(
+      `http://localhost:8080/phonebook/${id}`,
+      editObj
+    );
+    return response;
+  };
+
+  const editContactDataHandler = async (editObj) => {
+    try {
+      const response = await editContactService(editObj);
+      //Expecting updated response from the api
+      setContactListData(response.data.phonebook);
+      setIsModalOpen(false);
+      setIsEditing(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const editContactDataHandlerTemp = (editedObj) => {
+    const response = JSON.parse(localStorage.getItem("phonebook"));
+    const editedResponse = response.map((contactItem) =>
+      contactItem.id === editedObj.id ? editedObj : contactItem
+    );
+
+    localStorage.setItem("phonebook", JSON.stringify(editedResponse));
+    const updatedResponse = JSON.parse(localStorage.getItem("phonebook"));
+
+    setContactListData(updatedResponse);
+    setIsModalOpen(false);
+
+    setIsEditing(false);
   };
 
   return (
@@ -69,13 +123,31 @@ export const AddContactModal = ({ setIsModalOpen, setContactListData }) => {
         <button
           title="Close Modal"
           className="btn btn-sml pos-abs-top-right  box-shadow-none red-text-color fs-sml"
-          onClick={() => setIsModalOpen(false)}
+          onClick={() => {
+            setIsModalOpen(false);
+            setIsEditing(false);
+            setContactData(initialState);
+          }}
         >
-          <i class="fa-solid fa-circle-xmark"></i>
+          <i className="fa-solid fa-circle-xmark"></i>
         </button>
-        <h1> Add Contact</h1>
+        <h1>{isEditing ? "Edit Contact" : "Add Contact"}</h1>
         <form
-          onSubmit={() => postContactDataHandlerTemp(contactData)}
+          onSubmit={
+            isEditing
+              ? (e) => {
+                  e.preventDefault();
+                  editContactDataHandlerTemp(contactData);
+                  setContactData(initialState);
+                }
+              : (e) => {
+                  e.preventDefault();
+                  postContactDataHandlerTemp(contactData);
+                  setContactData(initialState);
+
+                  setSearchInput("");
+                }
+          }
           className="flex-start"
         >
           <div className="input-wrapper">
@@ -91,6 +163,7 @@ export const AddContactModal = ({ setIsModalOpen, setContactListData }) => {
               placeholder="Ben"
               onChange={formDataChangeHandler}
               required
+              value={firstName}
             />
           </div>
           <div className="input-wrapper">
@@ -106,6 +179,7 @@ export const AddContactModal = ({ setIsModalOpen, setContactListData }) => {
               className="form-input"
               placeholder="Awad"
               required
+              value={lastName}
             />
           </div>
           <div className="input-wrapper">
@@ -117,18 +191,20 @@ export const AddContactModal = ({ setIsModalOpen, setContactListData }) => {
               className="form-input"
               onChange={(e) => {
                 formDataChangeHandler(e);
+
                 getTelNumberVerificationHandler(Number(e.target.value));
               }}
               name="telNumber"
               id="number"
               title="Mobile Number"
               required
+              value={telNumber}
             />
             {Boolean(telNumber) && !isTelNumberValid && (
               <AlertBox
                 alertContent={{
                   type: "danger",
-                  message: "Enter a valid phone number",
+                  message: "Enter a valid phone number (Indian format)",
                 }}
               />
             )}
@@ -150,3 +226,7 @@ export const AddContactModal = ({ setIsModalOpen, setContactListData }) => {
 //To implement
 //  country codes for mobile number
 //
+
+//CHECK
+//EDIT NOT WORKING
+// IMPLEMENT SEARCH FUNCTIONALITY
